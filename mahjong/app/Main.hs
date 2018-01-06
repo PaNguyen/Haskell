@@ -70,7 +70,7 @@ main = do
   -- putStrLn $ show tiles
   let deck = Deck tiles
   Hand tenpai <- return $ getTenpaiPrefix deck
-  let waiting = waitingTiles (Hand tenpai)
+  let waiting = waitingTiles tiles (Hand tenpai)
   if length waiting < 3
     then main
     else do putStrLn . show . pretty $ tenpai

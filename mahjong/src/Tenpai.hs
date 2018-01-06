@@ -8,9 +8,9 @@ import Debug.Trace
 
 import Tiles
 
-waitingTiles :: Hand -> [Tile]
-waitingTiles (Hand hand) = nub $ filter (\t -> isComplete (Hand (t:hand))) $ deck \\ hand
-  where deck = tiles ++ tiles ++ tiles ++ tiles
+waitingTiles :: [Tile] -> Hand -> [Tile]
+waitingTiles deck (Hand hand) = nub $ filter (\t -> isComplete (Hand (t:hand))) $ deck \\ hand
+  -- where deck = tiles ++ tiles ++ tiles ++ tiles
 
 isComplete :: Hand -> Bool
 isComplete (Hand hand) = isCompleteHelp (sort hand) []
