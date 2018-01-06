@@ -64,13 +64,15 @@ getTenpaiPrefix (Deck deck) = evalTenpai deck []
 main :: IO ()
 main = do
   -- tiles <- shuffle $ tiles ++ tiles ++ tiles ++ tiles
-  allowed <- return $ [Dragon White] ++ pins
+  -- allowed <- return $ [Dragon White] ++ pins
+  allowed <- return pins
   tiles <- shuffle $ allowed ++ allowed ++ allowed ++ allowed
   -- putStrLn $ show tiles
   let deck = Deck tiles
   Hand tenpai <- return $ getTenpaiPrefix deck
-  putStrLn $ show $ pretty  $ sort tenpai
-  putStrLn $ show $ waitingTiles $ Hand tenpai
-  let hand = [Pin 4, Pin 4, Pin 5, Pin 5, Pin 6, Pin 6, Pin 8, Pin 8, Pin 8, Pin 8, Pin 9, Pin 9, Pin 9]
-  putStrLn . show . isComplete $ Hand hand
-  return ()
+  let waiting = waitingTiles (Hand tenpai)
+  if length waiting < 3
+    then main
+    else do putStrLn . show . pretty $ tenpai
+            putStrLn . show . pretty $ waiting
+            return ()
