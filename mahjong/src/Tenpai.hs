@@ -1,4 +1,4 @@
-module Tenpai(findTenpai, isTenpai, isComplete) where
+module Tenpai(findTenpai, isTenpai, isComplete, waitingTiles) where
 
 import Data.List
 import Data.Maybe
@@ -8,27 +8,30 @@ import Debug.Trace
 
 import Tiles
 
-isComplete = undefined
--- isComplete :: Hand -> Bool
--- isComplete (Hand hand) = isCompleteHelp hand []
---   where isCompleteHelp hand unused = 
---           case hand of
---             [] ->
---               (case unused of
---                  [x,y] | x == y -> True
---                  _ -> False
---               )
---             x:xs ->
---               (case tryMakeRun x xs of -- try use as run
---                  Just (set, rest) -> isCompleteHelp rest unused
---                  _ -> False
---               ) ||
---               (case tryMakeTrip x xs of --try use as trip
---                  Just (set, rest) -> isCompleteHelp rest unused
---                  _ -> False
---               ) ||
---               (isCompleteHelp hand (x:unused)
---               )
+waitingTiles :: Hand -> [Tile]
+waitingTiles (Hand hand) = nub $ filter (\t -> isComplete (Hand (t:hand))) $ deck \\ hand
+  where deck = tiles ++ tiles ++ tiles ++ tiles
+
+isComplete :: Hand -> Bool
+isComplete (Hand hand) = isCompleteHelp (sort hand) []
+  where isCompleteHelp hand unused = 
+          case hand of
+            [] ->
+              (case unused of
+                 [x,y] | x == y -> True
+                 _ -> False
+              )
+            x:xs ->
+              (case tryMakeRun x xs of -- try use as run
+                 Just (set, rest) -> isCompleteHelp rest unused
+                 _ -> False
+              ) ||
+              (case tryMakeTrip x xs of --try use as trip
+                 Just (set, rest) -> isCompleteHelp rest unused
+                 _ -> False
+              ) ||
+              (isCompleteHelp xs (x:unused)
+              )
 
 isTenpai :: Hand -> Bool
 isTenpai (Hand hand) = findTenpai hand /= Nothing && length hand == 13

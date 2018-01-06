@@ -70,6 +70,7 @@ main = do
   let deck = Deck tiles
   Hand tenpai <- return $ getTenpaiPrefix deck
   putStrLn $ show $ pretty  $ sort tenpai
-  -- let hand = [Bamboo 1, Bamboo 2, Bamboo 3, Wind East, Wind East]
-  -- putStrLn . show . isComplete $ Hand hand
+  putStrLn $ show $ waitingTiles $ Hand tenpai
+  let hand = [Pin 4, Pin 4, Pin 5, Pin 5, Pin 6, Pin 6, Pin 8, Pin 8, Pin 8, Pin 8, Pin 9, Pin 9, Pin 9]
+  putStrLn . show . isComplete $ Hand hand
   return ()
